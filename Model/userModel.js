@@ -5,12 +5,11 @@ const { Schema } = mongoose;
 
 const recipesSchema = new Schema({
     recipeName: String,
-    recipe: String,
+    img: String,
     calories: Number,
     ingredients: [],
 });
 const userSchema = new Schema({
-    email: String,
     name: String,
     myRecipes: [recipesSchema],
 });
@@ -40,3 +39,36 @@ module.exports = Cheff;
 // 	calories:
 // 	ingredients:	
 // }
+
+addFavRecipe= (req, res) => {
+    const {name,img,calories,label,ingredients}=req.body
+    Cheff.find({ name: name }, (err, result) => {
+        if (result===undefined) {
+           const newUser= (
+               {
+                   name:name,
+                   myRecipes:
+                   [
+                       {
+                           label:label,
+                           img:img,
+                           calories:calories,
+                           ingredients:ingredients,
+                       }
+                   ]
+               }
+           )
+       newUser[0].save();
+        }
+     else {
+            result[0].myRecipes.push({
+                label:label,
+                img:img,
+                calories:calories,
+                ingredients:ingredients,
+            });
+            newUser[0].save();
+          
+        }
+    });
+}
