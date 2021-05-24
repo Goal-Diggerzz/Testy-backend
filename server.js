@@ -9,6 +9,7 @@ const addFavRecipe = require('./controller/userRecipes');
 const recipesGet = require('./controller/recipes');
 const blogModel = require('./Model/blogModel');
 app.use(express.json());
+const Cheff = require('./Model/userModel');
 
 // mongoose.connect('mongodb://localhost:27017/cheff', { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -19,10 +20,56 @@ app.get('/', function (req, res) {
 app.get('/nute', recipesGet)
 
 
-// app.post('/cheff', addFavRecipe );
+// app.post('/cheff', addFavRecipe);
+app.delete('/cheff/:index', deletRecipesFunc);
+
+function deletRecipesFunc(req, res) {
+    const index = Number(req.params.index);
+    console.log('this is the index', Number(index));
+    const { label, calories, img, ingridients } = req.body;
+    console.log('this is the email ', label);
+    Cheff.find({ label: label }, (err, userRecipe) => {
+        const newRecipeArr = userRecipe.Cheff.filter((b, idx) => {
+            return idx !== index;
+        });
+        userRecipe.Cheff = newRecipeArr;
+        userRecipe.save();
+        res.send('The blog has been deleted!');
 
 
-// app.post('/blogs', addBlogFunc)
+
+    });
+
+
+}
+
+
+// app.post('/blogs', addBlogFunc);
+
+
+
+// app.delete('/blogs/:index', deleteBlogFunc);
+
+// function deleteBlogFunc(req, res) {
+//     const index = Number(req.params.index);
+//     console.log('this is the index', index);
+//     const { title, text, userName, Image } = req.body;
+//     console.log('this is the email ', title);
+//     blogModel.find({ userName: userName }, (err, userBlog) => {
+//         const newBlogArr = userBlog[0].blogModel.filter((b, idx) => {
+//             return idx !== index;
+//         });
+//         userBlog[0].blogModel = newBlogArr;
+//         userBlog[0].save();
+//         res.send('The blog has been deleted!');
+
+
+
+//     });
+
+
+// }
+
 
 function addBlogFunc(req, res) {
     const { title, text, userName, Image } = req.body;
