@@ -20,6 +20,7 @@ app.get('/nute', recipesGet )
 
 
 app.post('/cheff', addFavRecipe );
+app.get('/cheff', addFavRecipe );
 
 
 app.post('/blogs', addBlogFunc)

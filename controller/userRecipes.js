@@ -2,12 +2,12 @@ const Cheff = require('../Model/userModel');
 
 
 function addFavRecipe(req, res){
-    const {name,img,calories,label,ingredients} = req.body;
-    Cheff.find({ name: name }, (err, result) => {
+    const {email,img,calories,label,ingredients} = req.body;
+    Cheff.find({ email: email }, (err, result) => {
         if (result.length == 0) {
             let newUser = new Cheff(
                 {
-                   name:name,
+                   email:email,
                    myRecipes:
                    [
                        {
@@ -21,7 +21,7 @@ function addFavRecipe(req, res){
                 )
                 // console.log(`newUser:${newUser[0]}`)
                 newUser.save();
-                res.send(newUser);
+                res.send(newUser[newUser.length-1]);
     }
     else {
         // console.log(result)

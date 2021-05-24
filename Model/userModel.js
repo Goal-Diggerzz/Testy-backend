@@ -10,7 +10,7 @@ const recipesSchema = new Schema({
     ingredients: [],
 });
 const userSchema = new Schema({
-    name: String,
+    email: String,
     myRecipes: [recipesSchema],
 });
 
