@@ -11,15 +11,14 @@ class Food {
 }
 
 function recipesGet(req, res) {
-    let query = req.query.q
-    console.log('query', query);
+    query = req.query.q
     try {
         const testApi2 = `https://api.edamam.com/search?app_key=${process.env.API_KEY}&app_id=${process.env.API_ID}&q=${query}`;
-        superagent.get(testApi2).then(yousefData => {
-            const newArr = yousefData.body.hits.map(data => new Food(data.recipe)
+        superagent.get(testApi2).then(foodData => {
+            const newArr = foodData.body.hits.map(data => new Food(data.recipe)
 
             )
-            console.log('recipes Array', newArr);
+            console.log(newArr);
             res.send(newArr);
         })
 
