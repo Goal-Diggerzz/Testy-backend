@@ -5,13 +5,14 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 app.use(cors())
 const PORT = process.env.PORT || 3001
-const addFavRecipe = require('./controller/userRecipes');
+const userRecipes = require('./controller/userRecipes');
+// const getMyRecipes = require('./controller/userRecipes');
 const recipesGet = require('./controller/recipes');
 const blogModel = require('./Model/blogModel');
 app.use(express.json());
 const Cheff = require('./Model/userModel');
 
-// mongoose.connect('mongodb://localhost:27017/cheff', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/cheff', { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.get('/', function (req, res) {
     res.send('homepage')
@@ -20,19 +21,15 @@ app.get('/', function (req, res) {
 app.get('/nute', recipesGet)
 
 
-<<<<<<< HEAD
-app.post('/cheff', addFavRecipe );
-app.get('/cheff', addFavRecipe );
-=======
-// app.post('/cheff', addFavRecipe);
+app.post('/cheff', userRecipes.addFavRecipe);
+app.get('/cheff',  userRecipes.getMyRecipes);
 app.delete('/cheff/:index', deletRecipesFunc);
->>>>>>> 05be4b0f85101a26e4eeecdd85560db253cfbccb
 
 function deletRecipesFunc(req, res) {
     const index = Number(req.params.index);
-    console.log('this is the index', Number(index));
-    const { label, calories, img, ingridients } = req.body;
-    console.log('this is the email ', label);
+    // console.log('this is the index', Number(index));
+    const { label, calories, img, ingredients } = req.body;
+    // console.log('this is the email ', label);
     Cheff.find({ label: label }, (err, userRecipe) => {
         const newRecipeArr = userRecipe.Cheff.filter((b, idx) => {
             return idx !== index;
