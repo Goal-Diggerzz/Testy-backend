@@ -7,11 +7,18 @@ app.use(cors())
 const PORT = process.env.PORT || 3001
 const addFavRecipe = require('./controller/userRecipes');
 const recipesGet = require('./controller/recipes');
-const blogModel = require('./Model/blogModel');
+const BlogUser = require('./Model/blogModel');
 app.use(express.json());
 const Cheff = require('./Model/userModel');
+const getBlog =require('./controller/addBlog')
 
-// mongoose.connect('mongodb://localhost:27017/cheff', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/cheff', { useNewUrlParser: true, useUnifiedTopology: true });
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+  // we're connected!
+});
 
 app.get('/', function (req, res) {
     res.send('homepage')
@@ -20,13 +27,10 @@ app.get('/', function (req, res) {
 app.get('/nute', recipesGet)
 
 
-<<<<<<< HEAD
-app.post('/cheff', addFavRecipe );
+
 app.get('/cheff', addFavRecipe );
-=======
-// app.post('/cheff', addFavRecipe);
+app.post('/cheff', addFavRecipe);
 app.delete('/cheff/:index', deletRecipesFunc);
->>>>>>> 05be4b0f85101a26e4eeecdd85560db253cfbccb
 
 function deletRecipesFunc(req, res) {
     const index = Number(req.params.index);
@@ -48,8 +52,8 @@ function deletRecipesFunc(req, res) {
 
 }
 
-
-// app.post('/blogs', addBlogFunc);
+app.get('/blog',getBlog)
+app.post('/blog', addBlogFunc);
 
 
 
@@ -75,18 +79,32 @@ function deletRecipesFunc(req, res) {
 
 // }
 
-
 function addBlogFunc(req, res) {
-    const { title, text, userName, Image } = req.body;
-    blogModel.find({ userName: userName }, (err, blogData) => {
-        const blogCollection = new blogModel({
-            title: title,
+    const { email,title, text, userName, Image } = req.body;
+    BlogUser.find({ email: email }, (err, blogData) => {
+        if(blogData.length===0){
+        let blogCollection = new BlogUser({
+            email:email,
+            blog:
+            [{title: title,
             text: text,
             userName: userName,
-            Image: Image,
+            Image: Image}]
         })
-        blogData.save();
-        res.send(blogData);
+        blogCollection.save();
+        res.send(blogCollection)
+        }
+        else {
+            blogData[0].blog.push({
+                title: title,
+                text: text,
+                userName: userName,
+                Image: Image,
+            })
+            console.log(blogData);
+            blogData[0].save();
+            res.send(blogData[0].blog)
+        }
     })
 }
 

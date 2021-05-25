@@ -14,8 +14,13 @@ const blogSchema = new Schema ({
     text: String,
     userName: String,
     Image: String,
+});
+const blogUserSchema =new Schema ({
+    email:String,
+    blog:[blogSchema]
 })
 
-const blogModel = mongoose.model('Blog', blogSchema);
+const Blog = mongoose.model('Blog', blogSchema);
+const BlogUser = mongoose.model('BlogUser', blogUserSchema);
 
-module.exports = blogModel;
+module.exports = BlogUser;
