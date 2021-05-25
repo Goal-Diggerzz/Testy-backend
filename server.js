@@ -11,7 +11,7 @@ const recipesGet = require('./controller/recipes');
 const BlogUser = require('./Model/blogModel');
 app.use(express.json());
 const Cheff = require('./Model/userModel');
-const getBlog =require('./controller/addBlog')
+const BlogController =require('./controller/BlogController')
 
 mongoose.connect('mongodb://localhost:27017/cheff', { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -56,9 +56,9 @@ function deletRecipesFunc(req, res) {
 
 }
 
-app.get('/blog',getBlog)
+app.get('/blog',BlogController.getBlog)
 app.post('/blog', addBlogFunc);
-
+app.delete('/blog/:index',BlogController.deleteBLog)
 
 
 // app.delete('/blogs/:index', deleteBlogFunc);
@@ -84,13 +84,15 @@ app.post('/blog', addBlogFunc);
 // }
 
 function addBlogFunc(req, res) {
+    
+
     const { email,title, text, userName, Image } = req.body;
     BlogUser.find({ email: email }, (err, blogData) => {
         if(blogData.length===0){
         let blogCollection = new BlogUser({
             email:email,
-            blog:
-            [{title: title,
+            blog:[{
+            title: title,
             text: text,
             userName: userName,
             Image: Image}]
@@ -107,7 +109,7 @@ function addBlogFunc(req, res) {
             })
             console.log(blogData);
             blogData[0].save();
-            res.send(blogData[0].blog)
+            res.send(blogData[0])
         }
     })
 }
