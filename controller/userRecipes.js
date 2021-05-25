@@ -1,5 +1,6 @@
 const Cheff = require('../Model/userModel');
 
+
 function getMyRecipes(req, res) {
     const { email } = req.query;
     console.log(`this is q`,email);
@@ -11,10 +12,12 @@ function getMyRecipes(req, res) {
 }
 function addFavRecipe(req, res) {
     const { img, calories, label, ingredients,email } = req.body;
+
     Cheff.find({ email: email }, (err, result) => {
         if (result.length == 0) {
             let newUser = new Cheff(
                 {
+
                     email: email,
                     myRecipes:
                         [
@@ -44,6 +47,7 @@ function addFavRecipe(req, res) {
             res.send(result[0]);
         }
     });
+
 }
 
 module.exports = {addFavRecipe,getMyRecipes};
