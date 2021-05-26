@@ -7,7 +7,7 @@ function getMyRecipes(req, res) {
     Cheff.find({ email: email }, function (err, result) {
         if (err) res.send('didnt work');
         // console.log(`am here`,result[0].myRecipes);
-        res.send(result);
+        res.send(result[0].myRecipes);
     });
 }
 function addFavRecipe(req, res) {

@@ -38,15 +38,18 @@ app.delete('/cheff/:index', deletRecipesFunc);
 
 function deletRecipesFunc(req, res) {
     const index = Number(req.params.index);
-
-    const { label} = req.body;
+console.log('my index',index);
+    const { email} = req.query
     // console.log('this is the email ', label);
-    Cheff.find({ label: label }, (err, userRecipe) => {
+    Cheff.find({ email: email }, (err, userRecipe) => {
+        console.log('userRecipe',userRecipe);
         const newRecipeArr = userRecipe[0].myRecipes.filter((b, idx) => {
+            console.log('b',b);
             return idx !== index;
         });
-        console.log('hiiiii',userRecipe[0]);
+        console.log('hiiiii',newRecipeArr);
         userRecipe[0].myRecipes = newRecipeArr;
+        console.log(userRecipe[1]);
         userRecipe[0].save();
         res.send('The Recipe has been deleted!');
 
@@ -107,7 +110,7 @@ function addBlogFunc(req, res) {
                 userName: userName,
                 Image: Image,
             })
-            console.log(blogData);
+            // console.log(blogData);
             blogData[0].save();
             res.send(blogData[0])
         }
