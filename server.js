@@ -38,21 +38,21 @@ app.delete('/cheff/:index', deletRecipesFunc);
 
 function deletRecipesFunc(req, res) {
     const index = Number(req.params.index);
-    // console.log('this is the index', Number(index));
-    const { label, calories, img, ingredients } = req.body;
+
+    const { label} = req.body;
     // console.log('this is the email ', label);
     Cheff.find({ label: label }, (err, userRecipe) => {
-        const newRecipeArr = userRecipe.Cheff.filter((b, idx) => {
+        const newRecipeArr = userRecipe[0].myRecipes.filter((b, idx) => {
             return idx !== index;
         });
-        userRecipe.Cheff = newRecipeArr;
-        userRecipe.save();
-        res.send('The blog has been deleted!');
+        console.log('hiiiii',userRecipe[0]);
+        userRecipe[0].myRecipes = newRecipeArr;
+        userRecipe[0].save();
+        res.send('The Recipe has been deleted!');
 
 
 
     });
-
 
 }
 

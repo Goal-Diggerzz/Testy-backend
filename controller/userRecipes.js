@@ -3,11 +3,11 @@ const Cheff = require('../Model/userModel');
 
 function getMyRecipes(req, res) {
     const { email } = req.query;
-    console.log(`this is q`,email);
+    // console.log(`this is q`,email);
     Cheff.find({ email: email }, function (err, result) {
         if (err) res.send('didnt work');
-        console.log(`am here`,result[0].myRecipes);
-        res.send(result[0].myRecipes);
+        // console.log(`am here`,result[0].myRecipes);
+        res.send(result);
     });
 }
 function addFavRecipe(req, res) {
